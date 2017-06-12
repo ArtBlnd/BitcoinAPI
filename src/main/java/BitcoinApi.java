@@ -1,7 +1,6 @@
 import Sites.*;
 import Base.*;
 
-
 public class BitcoinApi
 {
     private IBitcoinSiteApi[] SiteApis;
@@ -37,25 +36,25 @@ public class BitcoinApi
         return SiteApis[site.ordinal()].getAvgPrice(type);
     }
 
-    public void Refresh()
+    public void Refresh() throws Exception
     {
         for(int indexSite = 0; indexSite < SiteTypeAvailable; ++indexSite)
         {
             SiteApis[indexSite].Refresh();
         }
     }
-    public void Refresh(EnumSiteTypes site)
+    public void Refresh(EnumSiteTypes site) throws Exception
     {
         SiteApis[site.ordinal()].Refresh();
     }
-    public void Refresh(EnumCoinTypes type)
+    public void Refresh(EnumCoinTypes type) throws Exception
     {
         for(int indexSite = 0; indexSite < SiteTypeAvailable; ++indexSite)
         {
             SiteApis[indexSite].Refresh(type);
         }
     }
-    public void Refresh(EnumSiteTypes site, EnumCoinTypes type)
+    public void Refresh(EnumSiteTypes site, EnumCoinTypes type) throws Exception
     {
         SiteApis[site.ordinal()].Refresh(type);
     }
