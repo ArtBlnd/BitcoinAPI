@@ -24,4 +24,12 @@ public class YunbiApi implements IBitcoinSiteApi
     {
         return 0;
     }
+    public int getFirstPrice(EnumCoinTypes type)
+    {
+        return 0;
+    }
+    public int getLastPrice(EnumCoinTypes type)
+    {
+        return 0;
+    }
 }

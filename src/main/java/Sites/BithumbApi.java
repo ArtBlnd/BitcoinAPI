@@ -1,5 +1,7 @@
 package Sites;
 
+import Exception.ExceptionUnsupportedCoinType;
+
 import Base.CoinInfo;
 import Base.IBitcoinSiteApi;
 import Base.EnumCoinTypes;
@@ -15,6 +17,8 @@ public class BithumbApi implements IBitcoinSiteApi
     private final String tokenMinPrice = "min_price";
     private final String tokenMaxPrice = "max_price";
     private final String tokenAvgPrice = "average_price";
+    private final String tokenFirstPrice = "opening_price";
+    private final String tokenLastPrice = "closing_price";
 
     private final String requestURL = "https://api.bithumb.com/public/ticker/";
 
@@ -27,7 +31,7 @@ public class BithumbApi implements IBitcoinSiteApi
         Infomation = new CoinInfo[6];
     }
 
-    private String CoinTypeToToken(EnumCoinTypes type)
+    private String CoinTypeToToken(EnumCoinTypes type) throws ExceptionUnsupportedCoinType
     {
         switch(type)
         {
@@ -37,18 +41,22 @@ public class BithumbApi implements IBitcoinSiteApi
         case LightCoin          : return "LTC";
         case EtheriumClassic    : return "ETC";
         case Ripple             : return "XRP";
-        default : return "";
+        default : throw new ExceptionUnsupportedCoinType("Unsupported Coin Type!");
         }
     }
 
-    public void Refresh()
+    public void Refresh() 
     {
         for(EnumCoinTypes type : EnumCoinTypes.values())
         {
-            Refresh(type);
+            try {
+                Refresh(type);
+            } catch(ExceptionUnsupportedCoinType e) {
+
+            }
         }
     }
-    public void Refresh(EnumCoinTypes type)
+    public void Refresh(EnumCoinTypes type) throws ExceptionUnsupportedCoinType
     {
         String targetUrl = requestURL + CoinTypeToToken(type);
 
@@ -65,6 +73,8 @@ public class BithumbApi implements IBitcoinSiteApi
             Infomation[type.ordinal()].MaxPrice = Integer.parseInt(jsonNextObject.get(tokenMaxPrice).toString());
             Infomation[type.ordinal()].MinPrice = Integer.parseInt(jsonNextObject.get(tokenMinPrice).toString());
             Infomation[type.ordinal()].AvgPrice = Integer.parseInt(jsonNextObject.get(tokenAvgPrice).toString());
+            Infomation[type.ordinal()].FirstPrice = Integer.parseInt(jsonNextObject.get(tokenFirstPrice).toString());
+            Infomation[type.ordinal()].LastPrice = Integer.parseInt(jsonNextObject.get(tokenLastPrice).toString());
 
             stream.close();
         } catch(Exception e) {
@@ -82,5 +92,13 @@ public class BithumbApi implements IBitcoinSiteApi
     public int getAvgPrice(EnumCoinTypes type)
     {
         return Infomation[type.ordinal()].AvgPrice;
+    }
+    public int getFirstPrice(EnumCoinTypes type)
+    {
+        return Infomation[type.ordinal()].FirstPrice;
+    }
+    public int getLastPrice(EnumCoinTypes type)
+    {
+        return Infomation[type.ordinal()].LastPrice;
     }
 }
