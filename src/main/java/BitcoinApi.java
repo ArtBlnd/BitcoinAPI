@@ -4,7 +4,7 @@ import Base.*;
 
 public class BitcoinApi
 {
-    private IBitcoinSiteApi[] SiteAp
+    private IBitcoinSiteApi[] SiteApis;
     public final int CoinTypeAvailable = 6;
     public final int SiteTypeAvailable = 9;
 
