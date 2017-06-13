@@ -24,12 +24,14 @@ public class CoinOneApi implements IBitcoinSiteApi
     private final String tickerRequestURL = "https://api.coinone.co.kr/ticker/";
     private final String orderbookRequestURL = "https://api.coinone.co.kr/orderbook/";
 
-    JSONParser jsonParser;
+    JSONParser jsonParser_ticker;
+    JSONParser jsonParser_orderbook;
     CoinInfo[] Infomation;
 
     public CoinOneApi()
     {
-        jsonParser = new JSONParser();
+        jsonParser_ticker = new JSONParser();
+        jsonParser_orderbook = new JSONParser();
         Infomation = new CoinInfo[6];
     }
 
@@ -72,8 +74,9 @@ public class CoinOneApi implements IBitcoinSiteApi
             JSONArray           jsonArray_orderbook_bid;
             JSONArray           jsonArray_orderbook_ask;
 
-            jsonObject_ticker       = (JSONObject) jsonParser.parse(stream_ticker);
-            jsonObject_orderbook    = (JSONObject) jsonParser.parse(stream_orderbook);
+            jsonObject_ticker       = (JSONObject) jsonParser_ticker.parse(stream_ticker);
+            
+            jsonObject_orderbook    = (JSONObject) jsonParser_orderbook.parse(stream_orderbook);
             jsonArray_orderbook_ask = (JSONArray) jsonObject_orderbook.get("ask");
             jsonArray_orderbook_bid = (JSONArray) jsonObject_orderbook.get("bid");
 
