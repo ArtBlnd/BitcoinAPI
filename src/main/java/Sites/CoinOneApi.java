@@ -94,7 +94,7 @@ public class CoinOneApi implements IBitcoinSiteApi
             jsonObject_orderbook_price_bid = (JSONObject)jsonArray_orderbook_bid.get(jsonArray_orderbook_ask.size());
             jsonObject_orderbook_price_ask = (JSONObject)jsonArray_orderbook_ask.get(jsonArray_orderbook_ask.size());
 
-            Infomation[type.ordinal()].SellPrice = Integer.parseInt(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
+            Infomation[type.ordinal()].SellPrice = Integer.parseInt(jsonObject_orderbook_price_ask.get(tokenPrice).toString());
             Infomation[type.ordinal()].BuyPrice = Integer.parseInt(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
 
             stream_ticker.close();
