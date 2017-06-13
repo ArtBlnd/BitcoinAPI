@@ -20,6 +20,7 @@ public class CoinOneApi implements IBitcoinSiteApi
     private final String tokenMaxPrice = "high";
     private final String tokenFirstPrice = "first";
     private final String tokenLastPrice = "last";
+    private final String tokenPrice = "price";
 
     private final String tickerRequestURL = "https://api.coinone.co.kr/ticker/";
     private final String orderbookRequestURL = "https://api.coinone.co.kr/orderbook/";
@@ -71,11 +72,13 @@ public class CoinOneApi implements IBitcoinSiteApi
             URL                 CoinOneApiOrderbookURL  = new URL(targetOrderbookURL);
             InputStreamReader   stream_orderbook        = new InputStreamReader(CoinOneApiOrderbookURL.openConnection().getInputStream(), "UTF-8");
             JSONObject          jsonObject_orderbook;
+            JSONObject          jsonObject_orderbook_price_bid;
+            JSONObject          jsonObject_orderbook_price_ask;
             JSONArray           jsonArray_orderbook_bid;
             JSONArray           jsonArray_orderbook_ask;
 
             jsonObject_ticker       = (JSONObject) jsonParser_ticker.parse(stream_ticker);
-            
+
             jsonObject_orderbook    = (JSONObject) jsonParser_orderbook.parse(stream_orderbook);
             jsonArray_orderbook_ask = (JSONArray) jsonObject_orderbook.get("ask");
             jsonArray_orderbook_bid = (JSONArray) jsonObject_orderbook.get("bid");
@@ -87,8 +90,12 @@ public class CoinOneApi implements IBitcoinSiteApi
 
             // Parsing Index of JSONArray.size() because last object will return least/most size of bid
             // JSONArray.size()를 index로 파싱하는 이유는. 제일 작거나 제일 큰 값으로 매겨진 값을 얻기 위해서입니다.
-            Infomation[type.ordinal()].SellPrice = Integer.parseInt(jsonArray_orderbook_ask.get(jsonArray_orderbook_ask.size()).toString());
-            Infomation[type.ordinal()].BuyPrice = Integer.parseInt(jsonArray_orderbook_ask.get(jsonArray_orderbook_bid.size()).toString());
+
+            jsonObject_orderbook_price_bid = (JSONObject)jsonArray_orderbook_bid.get(jsonArray_orderbook_ask.size());
+            jsonObject_orderbook_price_ask = (JSONObject)jsonArray_orderbook_ask.get(jsonArray_orderbook_ask.size());
+
+            Infomation[type.ordinal()].SellPrice = Integer.parseInt(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
+            Infomation[type.ordinal()].BuyPrice = Integer.parseInt(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
 
             stream_ticker.close();
             stream_orderbook.close();
