@@ -19,6 +19,8 @@ public class BithumbApi implements IBitcoinSiteApi
     private final String tokenAvgPrice = "average_price";
     private final String tokenFirstPrice = "opening_price";
     private final String tokenLastPrice = "closing_price";
+    private final String tokenSellPrice = "sell_price";
+    private final String tokenBuyPrice = "buy_price";
 
     private final String requestURL = "https://api.bithumb.com/public/ticker/";
 
@@ -70,11 +72,15 @@ public class BithumbApi implements IBitcoinSiteApi
             jsonPrivObject = (JSONObject) jsonParser.parse(stream);
             jsonNextObject = (JSONObject) jsonPrivObject.get("data");
 
-            Infomation[type.ordinal()].MaxPrice = Integer.parseInt(jsonNextObject.get(tokenMaxPrice).toString());
-            Infomation[type.ordinal()].MinPrice = Integer.parseInt(jsonNextObject.get(tokenMinPrice).toString());
-            Infomation[type.ordinal()].AvgPrice = Integer.parseInt(jsonNextObject.get(tokenAvgPrice).toString());
-            Infomation[type.ordinal()].FirstPrice = Integer.parseInt(jsonNextObject.get(tokenFirstPrice).toString());
-            Infomation[type.ordinal()].LastPrice = Integer.parseInt(jsonNextObject.get(tokenLastPrice).toString());
+            final int coinValue = type.ordinal();
+
+            Infomation[coinValue].MaxPrice = Integer.parseInt(jsonNextObject.get(tokenMaxPrice).toString());
+            Infomation[coinValue].MinPrice = Integer.parseInt(jsonNextObject.get(tokenMinPrice).toString());
+            Infomation[coinValue].AvgPrice = Integer.parseInt(jsonNextObject.get(tokenAvgPrice).toString());
+            Infomation[coinValue].FirstPrice = Integer.parseInt(jsonNextObject.get(tokenFirstPrice).toString());
+            Infomation[coinValue].LastPrice = Integer.parseInt(jsonNextObject.get(tokenLastPrice).toString());
+            Infomation[coinValue].SellPrice = Integer.parseInt(jsonNextObject.get(tokenSellPrice).toString());
+            Infomation[coinValue].BuyPrice = Integer.parseInt(jsonNextObject.get(tokenBuyPrice).toString());
 
             stream.close();
         } catch(Exception e) {
@@ -100,5 +106,13 @@ public class BithumbApi implements IBitcoinSiteApi
     public int getLastPrice(EnumCoinTypes type)
     {
         return Infomation[type.ordinal()].LastPrice;
+    }
+    public int getSellPrice(EnumCoinTypes type)
+    {
+        return Infomation[type.ordinal()].SellPrice;
+    }
+    public int getBuyPrice(EnumCoinTypes type)
+    {
+        return Infomation[type.ordinal()].BuyPrice;
     }
 }

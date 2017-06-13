@@ -1,5 +1,6 @@
 import Sites.*;
 import Base.*;
+import Exception.*;
 
 public class BitcoinApi
 {
@@ -21,19 +22,36 @@ public class BitcoinApi
         SiteApis[EnumSiteTypes.OkCoin.ordinal()] = new OkCoinApi();
     }
 
-    public int getMaxPrice(EnumSiteTypes site, EnumCoinTypes type)
+    public int getMaxPrice(EnumSiteTypes site, EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
         return SiteApis[site.ordinal()].getMaxPrice(type);
     }
 
-    public int getMinPrice(EnumSiteTypes site, EnumCoinTypes type)
+    public int getMinPrice(EnumSiteTypes site, EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
         return SiteApis[site.ordinal()].getMinPrice(type);
     }
 
-    public int getAvgPrice(EnumSiteTypes site, EnumCoinTypes type)
+    public int getAvgPrice(EnumSiteTypes site, EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
         return SiteApis[site.ordinal()].getAvgPrice(type);
+    }
+
+    public int getFirstPrice(EnumSiteTypes site, EnumCoinTypes type) throws ExceptionUnsupportedPriceType
+    {
+        return SiteApis[site.ordinal()].getFirstPrice(type);
+    }
+    public int getLastPrice(EnumSiteTypes site, EnumCoinTypes type) throws ExceptionUnsupportedPriceType
+    {
+        return SiteApis[site.ordinal()].getLastPrice(type);
+    }
+    public int getSellPrice(EnumSiteTypes site, EnumCoinTypes type) throws ExceptionUnsupportedPriceType
+    {
+        return SiteApis[site.ordinal()].getSellPrice(type);
+    }
+    public int getBuyPrice(EnumSiteTypes site, EnumCoinTypes type) throws ExceptionUnsupportedPriceType
+    {
+        return SiteApis[site.ordinal()].getBuyPrice(type);
     }
 
     public void Refresh() throws Exception

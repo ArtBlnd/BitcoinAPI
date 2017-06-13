@@ -32,4 +32,12 @@ public class OkCoinApi implements IBitcoinSiteApi
     {
         return 0;
     }
+    public int getSellPrice(EnumCoinTypes type)
+    {
+        return 0;
+    }
+    public int getBuyPrice(EnumCoinTypes type)
+    {
+        return 0;
+    }
 }

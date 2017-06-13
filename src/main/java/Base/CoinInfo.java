@@ -8,5 +8,8 @@ public class CoinInfo
 
     public int FirstPrice;
     public int LastPrice;
+    
+    public int SellPrice;
+    public int BuyPrice;
 }
     
