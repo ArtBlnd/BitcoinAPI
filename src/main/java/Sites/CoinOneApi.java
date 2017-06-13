@@ -14,7 +14,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class CoinOneApi implements IBitcoinSiteApi
+public class CoinOneApi extends IBitcoinSiteApi
 {
     private final String tokenMinPrice = "low";
     private final String tokenMaxPrice = "high";
@@ -27,13 +27,11 @@ public class CoinOneApi implements IBitcoinSiteApi
 
     JSONParser jsonParser_ticker;
     JSONParser jsonParser_orderbook;
-    CoinInfo[] Infomation;
 
     public CoinOneApi()
     {
         jsonParser_ticker = new JSONParser();
         jsonParser_orderbook = new JSONParser();
-        Infomation = new CoinInfo[6];
     }
 
     private String CoinTypeToToken(EnumCoinTypes type) throws ExceptionUnsupportedCoinType
@@ -83,10 +81,10 @@ public class CoinOneApi implements IBitcoinSiteApi
             jsonArray_orderbook_ask = (JSONArray) jsonObject_orderbook.get("ask");
             jsonArray_orderbook_bid = (JSONArray) jsonObject_orderbook.get("bid");
 
-            Infomation[type.ordinal()].MaxPrice = Integer.parseInt(jsonObject_ticker.get(tokenMaxPrice).toString());
-            Infomation[type.ordinal()].MinPrice = Integer.parseInt(jsonObject_ticker.get(tokenMinPrice).toString());
-            Infomation[type.ordinal()].FirstPrice = Integer.parseInt(jsonObject_ticker.get(tokenFirstPrice).toString());
-            Infomation[type.ordinal()].LastPrice = Integer.parseInt(jsonObject_ticker.get(tokenLastPrice).toString());
+            cachedInfo[type.ordinal()].MaxPrice = Integer.parseInt(jsonObject_ticker.get(tokenMaxPrice).toString());
+            cachedInfo[type.ordinal()].MinPrice = Integer.parseInt(jsonObject_ticker.get(tokenMinPrice).toString());
+            cachedInfo[type.ordinal()].FirstPrice = Integer.parseInt(jsonObject_ticker.get(tokenFirstPrice).toString());
+            cachedInfo[type.ordinal()].LastPrice = Integer.parseInt(jsonObject_ticker.get(tokenLastPrice).toString());
 
             // Parsing Index of JSONArray.size() because last object will return least/most size of bid
             // JSONArray.size()를 index로 파싱하는 이유는. 제일 작거나 제일 큰 값으로 매겨진 값을 얻기 위해서입니다.
@@ -94,41 +92,13 @@ public class CoinOneApi implements IBitcoinSiteApi
             jsonObject_orderbook_price_bid = (JSONObject)jsonArray_orderbook_bid.get(jsonArray_orderbook_ask.size());
             jsonObject_orderbook_price_ask = (JSONObject)jsonArray_orderbook_ask.get(jsonArray_orderbook_ask.size());
 
-            Infomation[type.ordinal()].SellPrice = Integer.parseInt(jsonObject_orderbook_price_ask.get(tokenPrice).toString());
-            Infomation[type.ordinal()].BuyPrice = Integer.parseInt(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
-
+            cachedInfo[type.ordinal()].BuyPrice = Integer.parseInt(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
+            cachedInfo[type.ordinal()].SellPrice = Integer.parseInt(jsonObject_orderbook_price_ask.get(tokenPrice).toString());
+            
             stream_ticker.close();
             stream_orderbook.close();
         } catch(Exception e) {
 
         }
-    }
-    public int getMaxPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].MaxPrice;
-    }
-    public int getMinPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].MinPrice;
-    }
-    public int getAvgPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
-    {
-        throw new ExceptionUnsupportedPriceType("Avg Price is not supported in this site!");
-    }
-    public int getFirstPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].FirstPrice;
-    }
-    public int getLastPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].LastPrice;
-    }
-    public int getSellPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].SellPrice;
-    }
-    public int getBuyPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].BuyPrice;
     }
 }

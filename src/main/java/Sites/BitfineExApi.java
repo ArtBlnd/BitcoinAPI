@@ -1,9 +1,20 @@
 package Sites;
 
+import Exception.ExceptionUnsupportedCoinType;
+import Exception.ExceptionUnsupportedPriceType;
+
+import Base.CoinInfo;
 import Base.IBitcoinSiteApi;
 import Base.EnumCoinTypes;
 
-public class BitfineExApi implements IBitcoinSiteApi
+import java.io.InputStreamReader;
+import java.net.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public class BitfineExApi extends IBitcoinSiteApi
 {
     public void Refresh()
     {

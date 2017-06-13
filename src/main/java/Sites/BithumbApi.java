@@ -2,7 +2,6 @@ package Sites;
 
 import Exception.ExceptionUnsupportedCoinType;
 
-import Base.CoinInfo;
 import Base.IBitcoinSiteApi;
 import Base.EnumCoinTypes;
 
@@ -12,7 +11,7 @@ import java.net.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class BithumbApi implements IBitcoinSiteApi
+public class BithumbApi extends IBitcoinSiteApi
 {
     private final String tokenMinPrice = "min_price";
     private final String tokenMaxPrice = "max_price";
@@ -25,12 +24,10 @@ public class BithumbApi implements IBitcoinSiteApi
     private final String requestURL = "https://api.bithumb.com/public/ticker/";
 
     JSONParser jsonParser;
-    CoinInfo[] Infomation;
 
     public BithumbApi()
     {
         jsonParser = new JSONParser();
-        Infomation = new CoinInfo[6];
     }
 
     private String CoinTypeToToken(EnumCoinTypes type) throws ExceptionUnsupportedCoinType
@@ -66,53 +63,21 @@ public class BithumbApi implements IBitcoinSiteApi
             URL                 BithumbAPIUrl = new URL(targetUrl);
             InputStreamReader   stream        = new InputStreamReader(BithumbAPIUrl.openConnection().getInputStream(), "UTF-8");
 
-            JSONObject          jsonPrivObject;
-            JSONObject          jsonNextObject;
-
-            jsonPrivObject = (JSONObject) jsonParser.parse(stream);
-            jsonNextObject = (JSONObject) jsonPrivObject.get("data");
+            JSONObject          jsonObject    = (JSONObject)((JSONObject)jsonParser.parse(stream)).get("data");
 
             final int coinValue = type.ordinal();
 
-            Infomation[coinValue].MaxPrice = Integer.parseInt(jsonNextObject.get(tokenMaxPrice).toString());
-            Infomation[coinValue].MinPrice = Integer.parseInt(jsonNextObject.get(tokenMinPrice).toString());
-            Infomation[coinValue].AvgPrice = Integer.parseInt(jsonNextObject.get(tokenAvgPrice).toString());
-            Infomation[coinValue].FirstPrice = Integer.parseInt(jsonNextObject.get(tokenFirstPrice).toString());
-            Infomation[coinValue].LastPrice = Integer.parseInt(jsonNextObject.get(tokenLastPrice).toString());
-            Infomation[coinValue].SellPrice = Integer.parseInt(jsonNextObject.get(tokenSellPrice).toString());
-            Infomation[coinValue].BuyPrice = Integer.parseInt(jsonNextObject.get(tokenBuyPrice).toString());
+            cachedInfo[coinValue].MaxPrice = Integer.parseInt(jsonObject.get(tokenMaxPrice).toString());
+            cachedInfo[coinValue].MinPrice = Integer.parseInt(jsonObject.get(tokenMinPrice).toString());
+            cachedInfo[coinValue].AvgPrice = Integer.parseInt(jsonObject.get(tokenAvgPrice).toString());
+            cachedInfo[coinValue].FirstPrice = Integer.parseInt(jsonObject.get(tokenFirstPrice).toString());
+            cachedInfo[coinValue].LastPrice = Integer.parseInt(jsonObject.get(tokenLastPrice).toString());
+            cachedInfo[coinValue].SellPrice = Integer.parseInt(jsonObject.get(tokenSellPrice).toString());
+            cachedInfo[coinValue].BuyPrice = Integer.parseInt(jsonObject.get(tokenBuyPrice).toString());
 
             stream.close();
         } catch(Exception e) {
 
         }
-    }
-    public int getMaxPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].MaxPrice;
-    }
-    public int getMinPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].MinPrice;
-    }
-    public int getAvgPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].AvgPrice;
-    }
-    public int getFirstPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].FirstPrice;
-    }
-    public int getLastPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].LastPrice;
-    }
-    public int getSellPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].SellPrice;
-    }
-    public int getBuyPrice(EnumCoinTypes type)
-    {
-        return Infomation[type.ordinal()].BuyPrice;
     }
 }
