@@ -1,11 +1,8 @@
-package Sites;
+package BitcoinAPI.Sites;
 
-import Exception.ExceptionUnsupportedCoinType;
-import Exception.ExceptionUnsupportedPriceType;
-
-import Base.CoinInfo;
-import Base.IBitcoinSiteApi;
-import Base.EnumCoinTypes;
+import BitcoinAPI.Exception.ExceptionUnsupportedCoinType;
+import BitcoinAPI.Base.IBitcoinSiteApiKR;
+import BitcoinAPI.Base.EnumCoinTypes;
 
 import java.io.InputStreamReader;
 import java.net.*;
@@ -14,7 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class CoinOneApi extends IBitcoinSiteApi
+public class CoinOneApi extends IBitcoinSiteApiKR
 {
     private final String tokenMinPrice = "low";
     private final String tokenMaxPrice = "high";
@@ -25,13 +22,11 @@ public class CoinOneApi extends IBitcoinSiteApi
     private final String tickerRequestURL = "https://api.coinone.co.kr/ticker/";
     private final String orderbookRequestURL = "https://api.coinone.co.kr/orderbook/";
 
-    JSONParser jsonParser_ticker;
-    JSONParser jsonParser_orderbook;
+    JSONParser jsonParser;
 
     public CoinOneApi()
     {
-        jsonParser_ticker = new JSONParser();
-        jsonParser_orderbook = new JSONParser();
+        jsonParser = new JSONParser();
     }
 
     private String CoinTypeToToken(EnumCoinTypes type) throws ExceptionUnsupportedCoinType
@@ -75,16 +70,16 @@ public class CoinOneApi extends IBitcoinSiteApi
             JSONArray           jsonArray_orderbook_bid;
             JSONArray           jsonArray_orderbook_ask;
 
-            jsonObject_ticker       = (JSONObject) jsonParser_ticker.parse(stream_ticker);
+            jsonObject_ticker       = (JSONObject) jsonParser.parse(stream_ticker);
 
-            jsonObject_orderbook    = (JSONObject) jsonParser_orderbook.parse(stream_orderbook);
+            jsonObject_orderbook    = (JSONObject) jsonParser.parse(stream_orderbook);
             jsonArray_orderbook_ask = (JSONArray) jsonObject_orderbook.get("ask");
             jsonArray_orderbook_bid = (JSONArray) jsonObject_orderbook.get("bid");
 
-            cachedInfo[type.ordinal()].MaxPrice = Integer.parseInt(jsonObject_ticker.get(tokenMaxPrice).toString());
-            cachedInfo[type.ordinal()].MinPrice = Integer.parseInt(jsonObject_ticker.get(tokenMinPrice).toString());
-            cachedInfo[type.ordinal()].FirstPrice = Integer.parseInt(jsonObject_ticker.get(tokenFirstPrice).toString());
-            cachedInfo[type.ordinal()].LastPrice = Integer.parseInt(jsonObject_ticker.get(tokenLastPrice).toString());
+            cachedInfo[type.ordinal()].MaxPrice = Double.parseDouble(jsonObject_ticker.get(tokenMaxPrice).toString());
+            cachedInfo[type.ordinal()].MinPrice = Double.parseDouble(jsonObject_ticker.get(tokenMinPrice).toString());
+            cachedInfo[type.ordinal()].FirstPrice = Double.parseDouble(jsonObject_ticker.get(tokenFirstPrice).toString());
+            cachedInfo[type.ordinal()].LastPrice = Double.parseDouble(jsonObject_ticker.get(tokenLastPrice).toString());
 
             // Parsing Index of JSONArray.size() because last object will return least/most size of bid
             // JSONArray.size()를 index로 파싱하는 이유는. 제일 작거나 제일 큰 값으로 매겨진 값을 얻기 위해서입니다.
@@ -92,8 +87,8 @@ public class CoinOneApi extends IBitcoinSiteApi
             jsonObject_orderbook_price_bid = (JSONObject)jsonArray_orderbook_bid.get(jsonArray_orderbook_ask.size());
             jsonObject_orderbook_price_ask = (JSONObject)jsonArray_orderbook_ask.get(jsonArray_orderbook_ask.size());
 
-            cachedInfo[type.ordinal()].BuyPrice = Integer.parseInt(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
-            cachedInfo[type.ordinal()].SellPrice = Integer.parseInt(jsonObject_orderbook_price_ask.get(tokenPrice).toString());
+            cachedInfo[type.ordinal()].BuyPrice = Double.parseDouble(jsonObject_orderbook_price_bid.get(tokenPrice).toString());
+            cachedInfo[type.ordinal()].SellPrice = Double.parseDouble(jsonObject_orderbook_price_ask.get(tokenPrice).toString());
             
             stream_ticker.close();
             stream_orderbook.close();

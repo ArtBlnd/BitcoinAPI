@@ -1,4 +1,4 @@
-package Exception;
+package BitcoinAPI.Exception;
 
 public class ExceptionUnsupportedPriceType extends Exception
 {

@@ -1,4 +1,4 @@
-package Base;
+package BitcoinAPI.Base;
 
 public enum EnumSiteTypes 
 {

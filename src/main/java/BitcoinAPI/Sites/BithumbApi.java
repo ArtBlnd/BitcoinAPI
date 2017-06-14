@@ -1,9 +1,9 @@
-package Sites;
+package BitcoinAPI.Sites;
 
-import Exception.ExceptionUnsupportedCoinType;
+import BitcoinAPI.Exception.ExceptionUnsupportedCoinType;
 
-import Base.IBitcoinSiteApi;
-import Base.EnumCoinTypes;
+import BitcoinAPI.Base.IBitcoinSiteApiKR;
+import BitcoinAPI.Base.EnumCoinTypes;
 
 import java.io.InputStreamReader;
 import java.net.*;
@@ -11,7 +11,7 @@ import java.net.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class BithumbApi extends IBitcoinSiteApi
+public class BithumbApi extends IBitcoinSiteApiKR
 {
     private final String tokenMinPrice = "min_price";
     private final String tokenMaxPrice = "max_price";
@@ -67,13 +67,13 @@ public class BithumbApi extends IBitcoinSiteApi
 
             final int coinValue = type.ordinal();
 
-            cachedInfo[coinValue].MaxPrice = Integer.parseInt(jsonObject.get(tokenMaxPrice).toString());
-            cachedInfo[coinValue].MinPrice = Integer.parseInt(jsonObject.get(tokenMinPrice).toString());
-            cachedInfo[coinValue].AvgPrice = Integer.parseInt(jsonObject.get(tokenAvgPrice).toString());
-            cachedInfo[coinValue].FirstPrice = Integer.parseInt(jsonObject.get(tokenFirstPrice).toString());
-            cachedInfo[coinValue].LastPrice = Integer.parseInt(jsonObject.get(tokenLastPrice).toString());
-            cachedInfo[coinValue].SellPrice = Integer.parseInt(jsonObject.get(tokenSellPrice).toString());
-            cachedInfo[coinValue].BuyPrice = Integer.parseInt(jsonObject.get(tokenBuyPrice).toString());
+            cachedInfo[coinValue].MaxPrice = Double.parseDouble(jsonObject.get(tokenMaxPrice).toString());
+            cachedInfo[coinValue].MinPrice = Double.parseDouble(jsonObject.get(tokenMinPrice).toString());
+            cachedInfo[coinValue].AvgPrice = Double.parseDouble(jsonObject.get(tokenAvgPrice).toString());
+            cachedInfo[coinValue].FirstPrice = Double.parseDouble(jsonObject.get(tokenFirstPrice).toString());
+            cachedInfo[coinValue].LastPrice = Double.parseDouble(jsonObject.get(tokenLastPrice).toString());
+            cachedInfo[coinValue].SellPrice = Double.parseDouble(jsonObject.get(tokenSellPrice).toString());
+            cachedInfo[coinValue].BuyPrice = Double.parseDouble(jsonObject.get(tokenBuyPrice).toString());
 
             stream.close();
         } catch(Exception e) {
