@@ -44,6 +44,19 @@ public class BithumbApi extends IBitcoinSiteApiKR
         }
     }
 
+    public EnumCoinTypes[] getAvailableCoinTypes()
+    {
+        return new EnumCoinTypes[] 
+        { 
+            EnumCoinTypes.Bitcoin, 
+            EnumCoinTypes.Etherium, 
+            EnumCoinTypes.Dash, 
+            EnumCoinTypes.LightCoin, 
+            EnumCoinTypes.EtheriumClassic, 
+            EnumCoinTypes.Ripple
+        };
+    }
+
     public void Refresh() 
     {
         for(EnumCoinTypes type : EnumCoinTypes.values())

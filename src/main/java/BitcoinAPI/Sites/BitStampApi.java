@@ -35,6 +35,15 @@ public class BitStampApi extends IBitcoinSiteApiUS
         }
     }
 
+    public EnumCoinTypes[] getAvailableCoinTypes()
+    {
+        return new EnumCoinTypes[]
+        {
+            EnumCoinTypes.Bitcoin,
+            EnumCoinTypes.Ripple
+        };
+    }
+
     public BitStampApi()
     {
         JsonParser     = new JSONParser();

@@ -16,6 +16,13 @@ import org.json.simple.parser.JSONParser;
 
 public class BitfineExApi extends IBitcoinSiteApiUS
 {
+
+    public EnumCoinTypes[] getAvailableCoinTypes()
+    {
+        return new EnumCoinTypes[]
+        {
+        };
+    }
     public void Refresh()
     {
     }

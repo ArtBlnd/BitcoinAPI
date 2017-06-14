@@ -41,6 +41,17 @@ public class CoinOneApi extends IBitcoinSiteApiKR
         }
     }
 
+    public EnumCoinTypes[] getAvailableCoinTypes()
+    {
+        return new EnumCoinTypes[] 
+        {
+            EnumCoinTypes.Bitcoin,
+            EnumCoinTypes.Etherium,
+            EnumCoinTypes.EtheriumClassic,
+            EnumCoinTypes.Ripple
+        };
+    }
+
     public void Refresh()
     {
         for(EnumCoinTypes type : EnumCoinTypes.values())

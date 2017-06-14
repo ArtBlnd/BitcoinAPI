@@ -5,6 +5,13 @@ import BitcoinAPI.Base.EnumCoinTypes;
 
 public class OkCoinApi extends IBitcoinSiteApiCN
 {
+    public EnumCoinTypes[] getAvailableCoinTypes()
+    {
+        return new EnumCoinTypes[]
+        {
+            
+        };
+    }
     public void Refresh()
     {
     }

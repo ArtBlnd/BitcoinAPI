@@ -4,6 +4,8 @@ import BitcoinAPI.Sites.*;
 import BitcoinAPI.Base.*;
 import BitcoinAPI.Exception.*;
 
+import java.util.ArrayList;
+
 public class BitcoinApi
 {
     private IBitcoinSiteApi[] SiteApis;
@@ -102,5 +104,46 @@ public class BitcoinApi
     public void Refresh(EnumSiteTypes site, EnumCoinTypes type) throws Exception
     {
         SiteApis[site.ordinal()].Refresh(type);
+    }
+
+    CoinInfo getRatioAs(EnumSiteTypes baseSite, EnumSiteTypes targetSite, EnumCoinTypes coinType) throws ExceptionUnsupportedPriceType
+    {
+        return SiteApis[baseSite.ordinal()].getRatio(SiteApis[targetSite.ordinal()], coinType);
+    }
+
+    CoinInfo getRatioAsCoin(EnumSiteTypes baseSite, EnumSiteTypes targetSite, EnumCoinTypes baseCoin, EnumCoinTypes targetCoin) throws ExceptionUnsupportedPriceType
+    {
+        return SiteApis[baseSite.ordinal()].getRatioAsCoin(SiteApis[targetSite.ordinal()], baseCoin, targetCoin);
+    }
+
+    EnumCoinTypes[] getAvailableCoinTypes(EnumSiteTypes site)
+    {
+        return SiteApis[site.ordinal()].getAvailableCoinTypes();
+    }
+
+    EnumCoinTypes[] getAvailableCoinTypes(EnumSiteTypes site_1, EnumSiteTypes site_2)
+    {
+        EnumCoinTypes[] availableTypes;
+
+        ArrayList<EnumCoinTypes> list = new ArrayList<EnumCoinTypes>();
+
+        IBitcoinSiteApi site_api_1 = SiteApis[site_1.ordinal()];
+        IBitcoinSiteApi site_api_2 = SiteApis[site_2.ordinal()];
+
+        for(int i = 0; i < site_api_1.getAvailableCoinTypes().length; ++i)
+        {
+            for(int j = 0; j < site_api_2.getAvailableCoinTypes().length; ++j)
+            {
+                if( site_api_1.getAvailableCoinTypes()[i] != site_api_2.getAvailableCoinTypes()[j] )
+                {
+                    continue;
+                }
+                list.add(site_api_1.getAvailableCoinTypes()[i]);
+            }
+        }
+
+        availableTypes = new EnumCoinTypes[list.size()];
+
+        return list.toArray(availableTypes);
     }
 };
