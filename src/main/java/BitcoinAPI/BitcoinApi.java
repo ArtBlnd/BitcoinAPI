@@ -77,6 +77,14 @@ public class BitcoinApi
         return Sites.get(site).getBuyPrice(type);
     }
     
+    public void setReigon(EnumReigonType reigon) throws Exception
+    {
+        for(EnumSiteTypes site : EnumSiteTypes.values())
+        {
+            Sites.get(site).setReigon(reigon);
+        }
+    }
+
     // Refresh all site infomation.
     // 모든 사이트 정보를 갱신합니다.
     public void Refresh() throws Exception
