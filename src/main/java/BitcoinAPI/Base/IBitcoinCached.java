@@ -1,23 +1,19 @@
 package BitcoinAPI.Base;
 
 import BitcoinAPI.Exception.ExceptionUnsupportedPriceType;
+import java.util.HashMap;
 
-public class IBitcoinCached
+public abstract class IBitcoinCached extends HashMap<EnumCoinTypes, CoinInfo> implements IBitcoinApiBase
 {
-    protected CoinInfo[] cachedInfo;
-    static final int nCoinTypes = 6;
-
     public IBitcoinCached()
     {
-        cachedInfo = new CoinInfo[nCoinTypes];
-        
-        for(int i = 0; i < nCoinTypes; ++i)
+        for (EnumCoinTypes type : EnumCoinTypes.values())
         {
-            cachedInfo[i] = new CoinInfo();
+            super.put(type, new CoinInfo());
         }
     }
 
-    public CoinInfo getRatio(IBitcoinCached target, EnumCoinTypes coinType) throws ExceptionUnsupportedPriceType
+    public CoinInfo getRatio(IBitcoinApiBase target, EnumCoinTypes coinType) throws ExceptionUnsupportedPriceType
     {
         CoinInfo info = new CoinInfo();
 
@@ -47,7 +43,7 @@ public class IBitcoinCached
         return info;
     }
 
-    public CoinInfo getRatioAsCoin(IBitcoinCached target, EnumCoinTypes baseCoin, EnumCoinTypes targetCoin) throws ExceptionUnsupportedPriceType
+    public CoinInfo getRatioAsCoin(IBitcoinApiBase target, EnumCoinTypes baseCoin, EnumCoinTypes targetCoin) throws ExceptionUnsupportedPriceType
     {
         CoinInfo info_base   = getRatioOfCoin(baseCoin, targetCoin);
         CoinInfo info_target = target.getRatioOfCoin(baseCoin, targetCoin);
@@ -67,48 +63,48 @@ public class IBitcoinCached
     // 24시간 이내의 최고가를 얻어냅니다.
     public double getMaxPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
-        return cachedInfo[type.ordinal()].MaxPrice;
+        return super.get(type).MaxPrice;
     }
 
     // Get min price in 24 hours.
     // 24시간 이내의 최소가를 얻어냅니다.
     public double getMinPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
-        return cachedInfo[type.ordinal()].MinPrice;
+        return super.get(type).MinPrice;
     }
 
     // Get avg price in 24 hours.
     // 24시간 이내의 평균가를 얻어냅니다.
     public double getAvgPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
-        return cachedInfo[type.ordinal()].AvgPrice;
+        return super.get(type).AvgPrice;
     }
 
     // Get first price in 24 hours.
     // 24시간 이내의 첫번째 가격을 가져옵니다.
     public double getFirstPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
-        return cachedInfo[type.ordinal()].FirstPrice;
+        return super.get(type).FirstPrice;
     }
 
     // Get last price in 24 hours.
     // 24시간 이내의 마지막 가격을 가져옵니다.
     public double getLastPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
-        return cachedInfo[type.ordinal()].LastPrice;
+        return super.get(type).LastPrice;
     }
 
     // Get cheapest sell price from site(that you can buy).
     // 가장 싼 가격의 비트코인가를 살수있는(사이트에서 파는.)  가격을 가져옵니다.
     public double getSellPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
-        return cachedInfo[type.ordinal()].SellPrice;
+        return super.get(type).SellPrice;
     }
 
     //  Get cheapest buy price from site(that you can sell).
     // 가장 싼 비싼의 비트코인가를 팔수있는(사이트에서 사는.) 가격을 가져옵니다.
     public double getBuyPrice(EnumCoinTypes type) throws ExceptionUnsupportedPriceType
     {
-        return cachedInfo[type.ordinal()].BuyPrice;
+        return super.get(type).BuyPrice;
     }
 }

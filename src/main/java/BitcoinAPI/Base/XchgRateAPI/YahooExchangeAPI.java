@@ -31,11 +31,6 @@ public class YahooExchangeAPI
         return "";
     }
 
-    private JSONObject parseAsJsonObject(Object object, String key)
-    {
-        return (JSONObject)((JSONObject)object).get(key);
-    }
-
     // 1의 target_1의 기준으로 target_2의 비율을 구합니다.
     // 예시 > 1Dolar (target_1) : 1240WON (target_2) returns 1240.
     public double Ratio(EnumReigonType target_1, EnumReigonType target_2) throws Exception
@@ -46,12 +41,6 @@ public class YahooExchangeAPI
         URL requestAPIUrl           = new URL(requestURL);
         InputStreamReader stream    = new InputStreamReader(requestAPIUrl.openConnection().getInputStream(), "UTF-8");
 
-        return Double.parseDouble(
-            parseAsJsonObject(
-                parseAsJsonObject(
-                    parseAsJsonObject(jsonParser.parse(stream), 
-                    "query"),
-                "result"),
-            "rate").toString());
+        return (Double) ((JSONObject)((JSONObject)((JSONObject)jsonParser.parse(stream)).get("query")).get("result")).get("rate");
     }
 }

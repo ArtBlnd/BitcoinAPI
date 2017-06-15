@@ -57,40 +57,29 @@ public class BithumbApi extends IBitcoinSiteApiKR
         };
     }
 
-    public void Refresh() 
+    public void Refresh() throws Exception
     {
         for(EnumCoinTypes type : EnumCoinTypes.values())
         {
-            try {
-                Refresh(type);
-            } catch(ExceptionUnsupportedCoinType e) {
-
-            }
+            Refresh(type);
         }
     }
-    public void Refresh(EnumCoinTypes type) throws ExceptionUnsupportedCoinType
+    public void Refresh(EnumCoinTypes type) throws Exception
     {
         String targetUrl = requestURL + CoinTypeToToken(type);
 
-        try {
-            URL                 BithumbAPIUrl = new URL(targetUrl);
-            InputStreamReader   stream        = new InputStreamReader(BithumbAPIUrl.openConnection().getInputStream(), "UTF-8");
+        URL                 BithumbAPIUrl = new URL(targetUrl);
+        InputStreamReader   stream        = new InputStreamReader(BithumbAPIUrl.openConnection().getInputStream(), "UTF-8");
+        JSONObject          jsonObject    = (JSONObject)((JSONObject)jsonParser.parse(stream)).get("data");
 
-            JSONObject          jsonObject    = (JSONObject)((JSONObject)jsonParser.parse(stream)).get("data");
+        super.get(type).MaxPrice = Double.parseDouble((String)jsonObject.get(tokenMaxPrice));
+        super.get(type).MinPrice = Double.parseDouble((String)jsonObject.get(tokenMinPrice));
+        super.get(type).AvgPrice = Double.parseDouble((String)jsonObject.get(tokenAvgPrice));
+        super.get(type).FirstPrice = Double.parseDouble((String)jsonObject.get(tokenFirstPrice));
+        super.get(type).LastPrice = Double.parseDouble((String)jsonObject.get(tokenLastPrice));
+        super.get(type).SellPrice = Double.parseDouble((String)jsonObject.get(tokenSellPrice));
+        super.get(type).BuyPrice = Double.parseDouble((String)jsonObject.get(tokenBuyPrice));
 
-            final int coinValue = type.ordinal();
-
-            cachedInfo[coinValue].MaxPrice = Double.parseDouble(jsonObject.get(tokenMaxPrice).toString());
-            cachedInfo[coinValue].MinPrice = Double.parseDouble(jsonObject.get(tokenMinPrice).toString());
-            cachedInfo[coinValue].AvgPrice = Double.parseDouble(jsonObject.get(tokenAvgPrice).toString());
-            cachedInfo[coinValue].FirstPrice = Double.parseDouble(jsonObject.get(tokenFirstPrice).toString());
-            cachedInfo[coinValue].LastPrice = Double.parseDouble(jsonObject.get(tokenLastPrice).toString());
-            cachedInfo[coinValue].SellPrice = Double.parseDouble(jsonObject.get(tokenSellPrice).toString());
-            cachedInfo[coinValue].BuyPrice = Double.parseDouble(jsonObject.get(tokenBuyPrice).toString());
-
-            stream.close();
-        } catch(Exception e) {
-
-        }
+        stream.close();
     }
 }
