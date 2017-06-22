@@ -5,7 +5,9 @@ import org.junit.Test;
 
 import BitcoinAPI.BitcoinApi;
 import BitcoinAPI.Base.EnumCoinTypes;
+import BitcoinAPI.Base.EnumReigonType;
 import BitcoinAPI.Base.EnumSiteTypes;
+import BitcoinAPI.Base.BitCoinApiUtils;
 
 
 public class APITest 
@@ -25,7 +27,7 @@ public class APITest
     }
 
     @Test
-    public void GetValueTest() throws Exception
+    public void GetValueTestAsKRW() throws Exception
     {
         api.Refresh(EnumSiteTypes.Bithumb);
 
@@ -34,13 +36,36 @@ public class APITest
         for(EnumCoinTypes type : EnumCoinTypes.values())
         {
             System.out.println("Coin Type : " + type.toString());
-            System.out.println("    - " + site.toString() + " Max Price   :" + api.getMaxPrice(EnumSiteTypes.Bithumb, EnumCoinTypes.Bitcoin));
-            System.out.println("    - " + site.toString() + " Mix Price   :" + api.getMinPrice(EnumSiteTypes.Bithumb, EnumCoinTypes.Bitcoin));
-            System.out.println("    - " + site.toString() + " Avg Price   :" + api.getAvgPrice(EnumSiteTypes.Bithumb, EnumCoinTypes.Bitcoin));
-            System.out.println("    - " + site.toString() + " First Price :" + api.getFirstPrice(EnumSiteTypes.Bithumb, EnumCoinTypes.Bitcoin));
-            System.out.println("    - " + site.toString() + " Last Price  :" + api.getLastPrice(EnumSiteTypes.Bithumb, EnumCoinTypes.Bitcoin));
-            System.out.println("    - " + site.toString() + " Sell Price  :" + api.getSellPrice(EnumSiteTypes.Bithumb, EnumCoinTypes.Bitcoin));
-            System.out.println("    - " + site.toString() + " Buy Price   :" + api.getBuyPrice(EnumSiteTypes.Bithumb, EnumCoinTypes.Bitcoin));
+            System.out.println("    - " + site.toString() + " Max Price   :" + api.getMaxPrice(site, type));
+            System.out.println("    - " + site.toString() + " Mix Price   :" + api.getMinPrice(site, type));
+            System.out.println("    - " + site.toString() + " Avg Price   :" + api.getAvgPrice(site, type));
+            System.out.println("    - " + site.toString() + " First Price :" + api.getFirstPrice(site, type));
+            System.out.println("    - " + site.toString() + " Last Price  :" + api.getLastPrice(site, type));
+            System.out.println("    - " + site.toString() + " Sell Price  :" + api.getSellPrice(site, type));
+            System.out.println("    - " + site.toString() + " Buy Price   :" + api.getBuyPrice(site, type)); 
+        }
+    }
+
+    @Test
+    public void GetValueTestAsUSD() throws Exception
+    {
+        api.Refresh(EnumSiteTypes.Bithumb);
+        api.setReigon(EnumReigonType.USD);
+
+
+
+
+        final EnumSiteTypes site = EnumSiteTypes.Bithumb;
+        for(EnumCoinTypes type : EnumCoinTypes.values())
+        {
+            System.out.println("Coin Type : " + type.toString());
+            System.out.println("    - " + site.toString() + " Max Price   :" + api.getMaxPrice(site, type));
+            System.out.println("    - " + site.toString() + " Mix Price   :" + api.getMinPrice(site, type));
+            System.out.println("    - " + site.toString() + " Avg Price   :" + api.getAvgPrice(site, type));
+            System.out.println("    - " + site.toString() + " First Price :" + api.getFirstPrice(site, type));
+            System.out.println("    - " + site.toString() + " Last Price  :" + api.getLastPrice(site, type));
+            System.out.println("    - " + site.toString() + " Sell Price  :" + api.getSellPrice(site, type));
+            System.out.println("    - " + site.toString() + " Buy Price   :" + api.getBuyPrice(site, type));
         }
     }
     

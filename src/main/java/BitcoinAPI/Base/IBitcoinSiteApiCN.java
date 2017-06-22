@@ -9,6 +9,7 @@ public abstract class IBitcoinSiteApiCN extends IBitcoinSiteApi
 
     public void setReigon(EnumReigonType reigon)
     {
+        
         currentReigon = reigon;
     }
 

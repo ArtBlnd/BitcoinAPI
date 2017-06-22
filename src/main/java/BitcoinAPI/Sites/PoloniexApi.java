@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import BitcoinAPI.Base.CoinInfo;
 import BitcoinAPI.Exception.ExceptionUnsupportedPriceType;
 
@@ -20,10 +23,11 @@ public class PoloniexApi implements IBitcoinApiBase
     HashMap<EnumCoinTypes, CoinInfo> cachedInfo;
 
     private final String targetURL = "https://poloniex.com/public?command=returnTicker";
-    private String cachedJsonData;
+    private JSONParser jsonParser;
 
     public PoloniexApi()
     {
+        jsonParser = new JSONParser();
         cachedInfo = new HashMap<EnumCoinTypes,CoinInfo>();
     }
 
@@ -50,17 +54,48 @@ public class PoloniexApi implements IBitcoinApiBase
     {
         return new EnumCoinTypes[]
         {
-            
+            EnumCoinTypes.Bitcoin,
+            EnumCoinTypes.Etherium,
+            EnumCoinTypes.Dash,
+            EnumCoinTypes.LightCoin,
+            EnumCoinTypes.Ripple,
+            EnumCoinTypes.EtheriumClassic
         };
     }
+
+    JSONObject ParseAsObject(String Token, InputStreamReader stream) throws Exception
+    {
+        return (JSONObject)((JSONObject)jsonParser.parse(stream)).get(Token);
+    }
+
+    Double ParseAsDouble(JSONObject jsonObject, String token)
+    {
+        return Double.parseDouble((String)jsonObject.get(token));
+    }
+
     public void Refresh()
     {
+        cachedInfo.clear();
+
         try {
             URL               reqestURL = new URL(targetURL);
             InputStreamReader stream = new InputStreamReader(reqestURL.openConnection().getInputStream(), "UTF-8");
 
-        } catch(Exception e) {
+            for(EnumCoinTypes cointype : getAvailableCoinTypes())
+            {
+                JSONObject jsonObject = ParseAsObject(CoinTypeToToken(cointype), stream);
+                CoinInfo newCoinInfo  = new CoinInfo();
 
+                newCoinInfo.MaxPrice = ParseAsDouble(jsonObject, "high24hr");
+                newCoinInfo.MinPrice = ParseAsDouble(jsonObject, "low24hr");
+                newCoinInfo.SellPrice = ParseAsDouble(jsonObject, "highestBid");
+                newCoinInfo.BuyPrice = ParseAsDouble(jsonObject, "lowestAsk");
+
+                cachedInfo.put(cointype, newCoinInfo);
+            }
+
+        } catch(Exception e) {
+            Refresh();
         }
     }
     public void Refresh(EnumCoinTypes type)
