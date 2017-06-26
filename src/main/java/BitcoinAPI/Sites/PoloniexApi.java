@@ -116,7 +116,18 @@ public class PoloniexApi implements IBitcoinApiBase
 
     public CoinInfo getRatio(IBitcoinApiBase target, EnumCoinTypes coinType) throws ExceptionUnsupportedPriceType
     {
+        
         CoinInfo info = new CoinInfo();
+        CoinInfo targetInfo = target.getRatioOfCoin(EnumCoinTypes.Bitcoin, coinType);
+        CoinInfo baseInfo = cachedInfo.get(coinType);
+
+        info.AvgPrice = targetInfo.AvgPrice / baseInfo.AvgPrice;
+        info.MaxPrice = targetInfo.MaxPrice / baseInfo.MaxPrice;
+        info.MinPrice = targetInfo.MinPrice / baseInfo.MinPrice;
+        info.SellPrice = targetInfo.SellPrice / baseInfo.SellPrice;
+        info.BuyPrice = targetInfo.BuyPrice / baseInfo.BuyPrice;
+        info.FirstPrice = targetInfo.FirstPrice / baseInfo.FirstPrice;
+        info.LastPrice = targetInfo.LastPrice / baseInfo.LastPrice;
 
         return info;
     }
@@ -124,11 +135,40 @@ public class PoloniexApi implements IBitcoinApiBase
     {
         CoinInfo info = new CoinInfo();
 
+        if(baseCoin == EnumCoinTypes.Bitcoin)
+        {
+            info = cachedInfo.get(targetCoin);
+        }
+        else
+        {
+            CoinInfo targetInfo = cachedInfo.get(targetCoin);
+            CoinInfo baseInfo = cachedInfo.get(baseCoin);
+
+            info.AvgPrice = targetInfo.AvgPrice / baseInfo.AvgPrice;
+            info.MaxPrice = targetInfo.MaxPrice / baseInfo.MaxPrice;
+            info.MinPrice = targetInfo.MinPrice / baseInfo.MinPrice;
+            info.SellPrice = targetInfo.SellPrice / baseInfo.SellPrice;
+            info.BuyPrice = targetInfo.BuyPrice / baseInfo.BuyPrice;
+            info.FirstPrice = targetInfo.FirstPrice / baseInfo.FirstPrice;
+            info.LastPrice = targetInfo.LastPrice / baseInfo.LastPrice;
+        }
+
         return info;
     }
     public CoinInfo getRatioAsCoin(IBitcoinApiBase target, EnumCoinTypes baseCoin, EnumCoinTypes targetCoin) throws ExceptionUnsupportedPriceType
     {
         CoinInfo info = new CoinInfo();
+        
+        CoinInfo targetInfo = target.getRatioOfCoin(baseCoin, targetCoin);
+        CoinInfo baseInfo = this.getRatioOfCoin(baseCoin, targetCoin);
+
+        info.AvgPrice = targetInfo.AvgPrice / baseInfo.AvgPrice;
+        info.MaxPrice = targetInfo.MaxPrice / baseInfo.MaxPrice;
+        info.MinPrice = targetInfo.MinPrice / baseInfo.MinPrice;
+        info.SellPrice = targetInfo.SellPrice / baseInfo.SellPrice;
+        info.BuyPrice = targetInfo.BuyPrice / baseInfo.BuyPrice;
+        info.FirstPrice = targetInfo.FirstPrice / baseInfo.FirstPrice;
+        info.LastPrice = targetInfo.LastPrice / baseInfo.LastPrice;
 
         return info;
     }
