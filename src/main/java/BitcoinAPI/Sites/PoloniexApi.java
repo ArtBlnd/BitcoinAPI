@@ -3,7 +3,6 @@ package BitcoinAPI.Sites;
 import BitcoinAPI.Base.IBitcoinApiBase;
 import BitcoinAPI.Base.EnumCoinTypes;
 import BitcoinAPI.Base.EnumReigonType;
-import BitcoinAPI.Base.EnumCoinTypes;
 
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -39,12 +38,12 @@ public class PoloniexApi implements IBitcoinApiBase
 
         switch(type)
         {
-            case Bitcoin: token += "BTC";
-            case Etherium: token += "ETH";
-            case Dash: token += "DASH";
-            case LightCoin: token += "LTC";
-            case Ripple: token += "XRP";
-            case EtheriumClassic: token += "ETC";
+            case Bitcoin: token += "BTC"; break;
+            case Etherium: token += "ETH"; break;
+            case Dash: token += "DASH"; break;
+            case LightCoin: token += "LTC"; break;
+            case Ripple: token += "XRP"; break;
+            case EtheriumClassic: token += "ETC"; break;
         }
 
         return token;
@@ -100,7 +99,7 @@ public class PoloniexApi implements IBitcoinApiBase
     }
     public void Refresh(EnumCoinTypes type)
     {
-        
+        Refresh();
     }
 
     // NOT SUPPORTING!!
